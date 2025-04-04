@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Check if auth is enabled
+
   final authEnabled = await AuthSettings.isAuthEnabled();
   
   runApp(SteganographyApp(
@@ -221,7 +221,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
               counterText: '',
             ),
             onChanged: (value) {
-              // No need for setState here, listener handles it
+              
             },
           ),
           if (widget.isSetup)
@@ -694,8 +694,8 @@ class OperationCard extends StatelessWidget {
                   color: Colors.grey.shade600,
                 ),
                 textAlign: TextAlign.center,
-                maxLines: 2, // Add this line
-                overflow: TextOverflow.ellipsis, // Add this line
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis, 
               ),
             ],
           ),
