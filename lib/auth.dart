@@ -3,6 +3,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 
+
 class AuthSettings {
   static const _keyAuthEnabled = 'auth_enabled';
   static const _keyAuthMethod = 'auth_method';
@@ -89,6 +90,8 @@ class AuthService {
   }
 }
 
+
+
 class PinEntryDialog extends StatefulWidget {
   final bool isSetup;
 
@@ -101,70 +104,188 @@ class PinEntryDialog extends StatefulWidget {
   _PinEntryDialogState createState() => _PinEntryDialogState();
 }
 
-class _PinEntryDialogState extends State<PinEntryDialog> {
-  final TextEditingController _pinController = TextEditingController();
-  bool _isButtonEnabled = false;
+class _PinEntryDialogState extends State<PinEntryDialog>
+    with SingleTickerProviderStateMixin {
+  final String _pin = '';
+  final List<bool> _pinFilled = [false, false, false, false];
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  bool _error = false;
 
   @override
   void initState() {
     super.initState();
-    _pinController.addListener(_updateButtonState);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.elasticInOut,
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _pinController.removeListener(_updateButtonState);
-    _pinController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
-  void _updateButtonState() {
+  void _updatePin(String value) {
+    if (_error) {
+      setState(() {
+        _error = false;
+        for (int i = 0; i < 4; i++) {
+          _pinFilled[i] = false;
+        }
+      });
+    }
+
     setState(() {
-      _isButtonEnabled = _pinController.text.length == 4;
+      for (int i = 0; i < 4; i++) {
+        if (i < value.length) {
+          _pinFilled[i] = true;
+        } else {
+          _pinFilled[i] = false;
+        }
+      }
+    });
+
+    // Animate the latest entered digit
+    if (value.isNotEmpty && value.length <= 4) {
+      _animationController.reset();
+      _animationController.forward();
+    }
+
+    // Auto-submit when all 4 digits are entered
+    if (value.length == 4) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        Navigator.pop(context, value);
+      });
+    }
+  }
+
+  void _showError() {
+    setState(() {
+      _error = true;
+    });
+    _animationController.reset();
+    _animationController.repeat(reverse: true);
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        _animationController.stop();
+        setState(() {
+          _error = false;
+          for (int i = 0; i < 4; i++) {
+            _pinFilled[i] = false;
+          }
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.isSetup ? 'Set Up PIN' : 'Enter PIN'),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text(
+        widget.isSetup ? 'Set Up PIN' : 'Enter PIN',
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(4, (index) {
+              return AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  final scale = (_pinFilled[index] && 
+                               index == _pinFilled.where((e) => e).length - 1) 
+                               ? _scaleAnimation.value : 1.0;
+                  return TweenAnimationBuilder<Color?>(
+                    tween: ColorTween(
+                      begin: _error ? Colors.red : Colors.grey.shade300,
+                      end: _pinFilled[index]
+                          ? (_error ? Colors.red : Theme.of(context).primaryColor)
+                          : Colors.grey.shade300,
+                    ),
+                    duration: const Duration(milliseconds: 200),
+                    builder: (context, color, _) {
+                      return Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: color,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            }),
+          ),
+          const SizedBox(height: 30),
           TextField(
-            controller: _pinController,
+            autofocus: true,
             obscureText: true,
             keyboardType: TextInputType.number,
             maxLength: 4,
-            decoration: const InputDecoration(
+            onChanged: _updatePin,
+            decoration: InputDecoration(
               hintText: 'Enter 4-digit PIN',
               counterText: '',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              prefixIcon: const Icon(Icons.lock_outline),
+              errorText: _error ? 'Invalid PIN' : null,
             ),
-            onChanged: (value) {},
           ),
           if (widget.isSetup)
-            const Text(
-              'Remember this PIN. You will need it to access the app.',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text(
+                'Remember this PIN. You will need it to access the app.',
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                textAlign: TextAlign.center,
+              ),
             ),
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _isButtonEnabled
-              ? () => Navigator.pop(context, _pinController.text)
-              : null,
-          child: const Text('OK'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: () => _showError(),
+              child: const Text('Ok'),
+            ),
+          ], 
         ),
       ],
     );
   }
 }
-
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
 
