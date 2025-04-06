@@ -153,13 +153,13 @@ class _PinEntryDialogState extends State<PinEntryDialog>
       }
     });
 
-    // Animate the latest entered digit
+
     if (value.isNotEmpty && value.length <= 4) {
       _animationController.reset();
       _animationController.forward();
     }
 
-    // Auto-submit when all 4 digits are entered
+
     if (value.length == 4) {
       Future.delayed(const Duration(milliseconds: 300), () {
         Navigator.pop(context, value);

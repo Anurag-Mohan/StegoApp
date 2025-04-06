@@ -241,138 +241,212 @@ class HomePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ).animate().fadeIn(delay: 400.ms),
                   const SizedBox(height: 40),
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.85,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
+                  
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.lock_rounded,
-                        title: 'Hide Text',
-                        subtitle: 'Embed text message in an image file',
-                        colors: isDarkMode 
-                            ? [const Color(0xFF5C6BC0), const Color(0xFF3949AB)]
-                            : [const Color(0xFF42A5F5), const Color(0xFF1976D2)],
-                        delay: 100.ms,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TextInputPage(),
-                            ),
-                          );
-                        },
-                      ),
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.lock_open_rounded,
-                        title: 'Extract Text',
-                        subtitle: 'Retrieve hidden text from steganographic image',
-                        colors: isDarkMode 
-                            ? [const Color(0xFF66BB6A), const Color(0xFF388E3C)]
-                            : [const Color(0xFF4CAF50), const Color(0xFF2E7D32)],
-                        delay: 200.ms,
-                        onTap: () async {
-                          final XFile? image = await ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                            imageQuality: 100,
-                          );
-                          if (image != null && context.mounted) {
+                      
+                      Card(
+                        elevation: 6,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(20),
+                          onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => ExtractTextPage(
-                                  carrierUri: image.path,
-                                ),
-                              ),
+                              MaterialPageRoute(builder: (ctx) => P2PChatPage()),
                             );
-                          }
-                        },
-                      ),
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.image_rounded,
-                        title: 'Hide Image',
-                        subtitle: 'Conceal an image within another image',
-                        colors: isDarkMode 
-                            ? [const Color(0xFFFFB74D), const Color(0xFFFF9800)]
-                            : [const Color(0xFFFFA726), const Color(0xFFE65100)],
-                        delay: 300.ms,
-                        onTap: () async {
-                          await _pickTwoImagesAndNavigate(
-                            context,
-                            (secret, carrier) => ProcessImageInImagePage(
-                              secretImageUri: secret,
-                              carrierUri: carrier,
+                          },
+                          child: Container(
+                            height: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: LinearGradient(
+                                colors: isDarkMode 
+                                    ? [const Color(0xFF4A148C), const Color(0xFF7B1FA2)]
+                                    : [const Color(0xFF7C4DFF), const Color(0xFFB388FF)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.image_search_rounded,
-                        title: 'Extract Image',
-                        subtitle: 'Recover hidden image from steganographic image',
-                        colors: isDarkMode 
-                            ? [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)]
-                            : [const Color(0xFF9C27B0), const Color(0xFF6A1B9A)],
-                        delay: 400.ms,
-                        onTap: () async {
-                          await _pickImageAndNavigate(
-                            context,
-                            (path) => ExtractImageFromImagePage(carrierUri: path),
-                          );
-                        },
-                      ),
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.video_library_rounded,
-                        title: 'Hide in Video',
-                        subtitle: 'Embed an image within video frames',
-                        colors: isDarkMode 
-                            ? [const Color(0xFFEF5350), const Color(0xFFD32F2F)]
-                            : [const Color(0xFFF44336), const Color(0xFFB71C1C)],
-                        delay: 500.ms,
-                        onTap: () async {
-                          await _pickImageAndVideoAndNavigate(context);
-                        },
-                      ),
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.video_settings_rounded,
-                        title: 'Extract Video',
-                        subtitle: 'Recover hidden image from steganographic video',
-                        colors: isDarkMode 
-                            ? [const Color(0xFF26A69A), const Color(0xFF00796B)]
-                            : [const Color(0xFF009688), const Color(0xFF00695C)],
-                        delay: 600.ms,
-                        onTap: () async {
-                          await _pickVideoAndNavigate(
-                            context,
-                            (path) => ExtractImageFromVideoPage(carrierVideoUri: path),
-                          );
-                        },
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.chat_bubble_rounded,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Secure P2P Chat',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Encrypted offline messaging with friends nearby',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white.withOpacity(0.9),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.white.withOpacity(0.8),
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ).animate().fadeIn(delay: 300.ms).slideY(
+                        begin: 0.3,
+                        end: 0,
+                        duration: 600.ms,
+                        curve: Curves.easeOutQuint,
                       ),
                       
-                      _buildOperationCard(
-                        context,
-                        icon: Icons.chat_rounded,
-                        title: 'Offline Chat',
-                        subtitle: 'P2P encrypted messaging without internet',
-                        colors: isDarkMode 
-                            ? [const Color(0xFF9E9E9E), const Color(0xFF424242)]
-                            : [const Color(0xFFE0E0E0), const Color(0xFF757575)],
-                        delay: 700.ms,
-                        onTap: () {
-                          Navigator.push(
+                     
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.85,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 20,
+                        children: [
+                          _buildOperationCard(
                             context,
-                            MaterialPageRoute(builder: (ctx) => P2PChatPage()),
-                          );
-                        },
+                            icon: Icons.lock_rounded,
+                            title: 'Hide Text',
+                            subtitle: 'Embed text message in an image file',
+                            colors: isDarkMode 
+                                ? [const Color(0xFF5C6BC0), const Color(0xFF3949AB)]
+                                : [const Color(0xFF42A5F5), const Color(0xFF1976D2)],
+                            delay: 100.ms,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TextInputPage(),
+                                ),
+                              );
+                            },
+                          ),
+                          _buildOperationCard(
+                            context,
+                            icon: Icons.lock_open_rounded,
+                            title: 'Extract Text',
+                            subtitle: 'Retrieve hidden text from steganographic image',
+                            colors: isDarkMode 
+                                ? [const Color(0xFF66BB6A), const Color(0xFF388E3C)]
+                                : [const Color(0xFF4CAF50), const Color(0xFF2E7D32)],
+                            delay: 200.ms,
+                            onTap: () async {
+                              final XFile? image = await ImagePicker().pickImage(
+                                source: ImageSource.gallery,
+                                imageQuality: 100,
+                              );
+                              if (image != null && context.mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ExtractTextPage(
+                                      carrierUri: image.path,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          _buildOperationCard(
+                            context,
+                            icon: Icons.image_rounded,
+                            title: 'Hide Image',
+                            subtitle: 'Conceal an image within another image',
+                            colors: isDarkMode 
+                                ? [const Color(0xFFFFB74D), const Color(0xFFFF9800)]
+                                : [const Color(0xFFFFA726), const Color(0xFFE65100)],
+                            delay: 300.ms,
+                            onTap: () async {
+                              await _pickTwoImagesAndNavigate(
+                                context,
+                                (secret, carrier) => ProcessImageInImagePage(
+                                  secretImageUri: secret,
+                                  carrierUri: carrier,
+                                ),
+                              );
+                            },
+                          ),
+                          _buildOperationCard(
+                            context,
+                            icon: Icons.image_search_rounded,
+                            title: 'Extract Image',
+                            subtitle: 'Recover hidden image from steganographic image',
+                            colors: isDarkMode 
+                                ? [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)]
+                                : [const Color(0xFF9C27B0), const Color(0xFF6A1B9A)],
+                            delay: 400.ms,
+                            onTap: () async {
+                              await _pickImageAndNavigate(
+                                context,
+                                (path) => ExtractImageFromImagePage(carrierUri: path),
+                              );
+                            },
+                          ),
+                          _buildOperationCard(
+                            context,
+                            icon: Icons.video_library_rounded,
+                            title: 'Hide in Video',
+                            subtitle: 'Embed an image within video frames',
+                            colors: isDarkMode 
+                                ? [const Color(0xFFEF5350), const Color(0xFFD32F2F)]
+                                : [const Color(0xFFF44336), const Color(0xFFB71C1C)],
+                            delay: 500.ms,
+                            onTap: () async {
+                              await _pickImageAndVideoAndNavigate(context);
+                            },
+                          ),
+                          _buildOperationCard(
+                            context,
+                            icon: Icons.video_settings_rounded,
+                            title: 'Extract Video',
+                            subtitle: 'Recover hidden image from steganographic video',
+                            colors: isDarkMode 
+                                ? [const Color(0xFF26A69A), const Color(0xFF00796B)]
+                                : [const Color(0xFF009688), const Color(0xFF00695C)],
+                            delay: 600.ms,
+                            onTap: () async {
+                              await _pickVideoAndNavigate(
+                                context,
+                                (path) => ExtractImageFromVideoPage(carrierVideoUri: path),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),

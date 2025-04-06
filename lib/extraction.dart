@@ -33,7 +33,7 @@ class _ExtractTextPageState extends State<ExtractTextPage> {
 
   Future<void> _extractData() async {
     try {
-      // Simulate progress updates
+
       for (int i = 0; i <= 100; i += 10) {
         await Future.delayed(const Duration(milliseconds: 200));
         if (mounted) {
@@ -161,7 +161,7 @@ class _ExtractImageFromImagePageState extends State<ExtractImageFromImagePage> {
 
   Future<void> _extractData() async {
     try {
-      // Simulate progress updates
+  
       for (int i = 0; i <= 100; i += 10) {
         await Future.delayed(const Duration(milliseconds: 200));
         if (mounted) {
@@ -281,7 +281,7 @@ class _ExtractImageFromVideoPageState extends State<ExtractImageFromVideoPage> {
 
   Future<void> _extractData() async {
     try {
-      // Simulate progress updates (slower for video)
+
       for (int i = 0; i <= 100; i += 5) {
         await Future.delayed(const Duration(milliseconds: 300));
         if (mounted) {

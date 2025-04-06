@@ -44,6 +44,7 @@ dependencies:
   flutter_animate: ^4.1.1+1
   characters: ^1.2.0
   flutter_p2p_connection: ^2.1.1
+  flutter_blue_plus: ^1.35.3
   
 
 

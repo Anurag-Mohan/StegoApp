@@ -255,7 +255,7 @@ public class MainActivity extends FlutterActivity {
                 response.put("error", "Failed to extract image");
                 result.success(response);
             } else {
-                // Convert bitmap to file and return path
+                
                 String outputPath = steganographyManager.saveBitmapToTempFile(extractedImage);
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", true);

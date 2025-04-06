@@ -175,7 +175,7 @@ class _ProcessTextInImagePageState extends State<ProcessTextInImagePage> {
 
   Future<void> _processData() async {
     try {
-      // Simulate progress updates
+
       for (int i = 0; i <= 100; i += 10) {
         await Future.delayed(const Duration(milliseconds: 200));
         if (mounted) {
@@ -298,7 +298,7 @@ class _ProcessImageInImagePageState extends State<ProcessImageInImagePage> {
 
   Future<void> _processData() async {
     try {
-      // Simulate progress updates
+
       for (int i = 0; i <= 100; i += 10) {
         await Future.delayed(const Duration(milliseconds: 200));
         if (mounted) {
@@ -421,7 +421,7 @@ class _ProcessImageInVideoPageState extends State<ProcessImageInVideoPage> {
 
   Future<void> _processData() async {
     try {
-      // Simulate progress updates (slower for video processing)
+
       for (int i = 0; i <= 100; i += 5) {
         await Future.delayed(const Duration(milliseconds: 300));
         if (mounted) {
