@@ -132,7 +132,7 @@ Optimized performance with parallel processing
 | Flutter SDK | Latest Stable | ✅ |
 | Android Studio | Latest | ✅ |
 | Java JDK | 8+ | ✅ |
-| Device/Emulator | Android/iOS | ✅ |
+| Device/Emulator | Android | ✅ |
 
 </div>
 
