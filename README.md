@@ -26,7 +26,7 @@ Watch the complete demonstration of INFIX Steganography Application in action:
 
 <div align="center">
 
-[![INFIX Steganography Demo](https://img.shields.io/badge/▶️-Watch%20Demo-red?style=for-the-badge&logo=youtube)](path/to/your/screen-recording.mp4)
+[![INFIX Steganography Demo](https://img.shields.io/badge/▶️-Watch%20Demo-red?style=for-the-badge&logo=youtube)](demo/demo.mp4)
 
 </div>
 
